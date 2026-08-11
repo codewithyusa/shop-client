@@ -14,7 +14,6 @@ export class AuthService {
   private router = inject(Router);
   private baseUrl = `${environment.apiUrl}/auth`;
 
-  // Hydrate from localStorage on app start so refresh doesn't log the user out
   currentUser = signal<User | null>(this.readStoredUser());
   token = signal<string | null>(localStorage.getItem(TOKEN_KEY));
 
