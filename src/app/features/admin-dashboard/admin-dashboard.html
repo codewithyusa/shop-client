@@ -1,218 +1,164 @@
 <div class="admin-page">
-
   <div class="admin-container">
 
     <div class="admin-header">
       <h1>Admin Dashboard</h1>
-
-      <p>
-        Manage your products and store.
-      </p>
+      <p>Manage your products and store.</p>
     </div>
-
-
-    <!-- Dashboard navigation -->
 
     <div class="dashboard-buttons">
-
-      <button
-        type="button"
-        class="dashboard-button active"
-      >
-        Create Product
+      <button type="button" [class.active]="activeTab() === 'create'" (click)="setTab('create')" class="dashboard-button">
+        + Create Product
       </button>
-
-      <button
-        type="button"
-        class="dashboard-button"
-      >
-        Products
+      <button type="button" [class.active]="activeTab() === 'products'" (click)="setTab('products')" class="dashboard-button">
+        🛒 Products
       </button>
-
-      <button
-        type="button"
-        class="dashboard-button"
-      >
-        Analytics
+      <button type="button" [class.active]="activeTab() === 'analytics'" (click)="setTab('analytics')" class="dashboard-button">
+        📊 Analytics
       </button>
-
     </div>
 
+    @if (activeTab() === 'create') {
+      <div class="product-card">
+        <h2>Create New Product</h2>
+        <p class="form-subtitle">Add a new product to your store.</p>
 
-    <!-- Create Product -->
-
-    <div class="product-card">
-
-      <h2>Create New Product</h2>
-
-      <p class="form-subtitle">
-        Add a new product to your store.
-      </p>
-
-
-      <form
-        [formGroup]="productForm"
-        (ngSubmit)="createProduct()"
-      >
-
-        <!-- Product Name -->
-
-        <div class="form-group">
-
-          <label for="productName">
-            Product Name
-          </label>
-
-          <input
-            id="productName"
-            type="text"
-            formControlName="productName"
-            placeholder="Enter product name"
-          />
-
-          @if (
-            productForm.controls.productName.touched &&
-            productForm.controls.productName.hasError('required')
-          ) {
-            <p class="error">
-              Product name is required.
-            </p>
-          }
-
-        </div>
-
-
-        <!-- Description -->
-
-        <div class="form-group">
-
-          <label for="description">
-            Description
-          </label>
-
-          <textarea
-            id="description"
-            formControlName="description"
-            placeholder="Enter product description"
-            rows="5"
-          ></textarea>
-
-          @if (
-            productForm.controls.description.touched &&
-            productForm.controls.description.hasError('required')
-          ) {
-            <p class="error">
-              Description is required.
-            </p>
-          }
-
-        </div>
-
-
-        <!-- Price and Category -->
-
-        <div class="form-row">
+        <form [formGroup]="productForm" (ngSubmit)="createProduct()">
 
           <div class="form-group">
-
-            <label for="price">
-              Price
-            </label>
-
-            <input
-              id="price"
-              type="number"
-              formControlName="price"
-              placeholder="0.00"
-              min="0"
-            />
-
+            <label for="productName">Product Name</label>
+            <input id="productName" type="text" formControlName="productName" placeholder="Enter product name" />
+            @if (productForm.controls.productName.touched && productForm.controls.productName.hasError('required')) {
+              <p class="error">Product name is required.</p>
+            }
           </div>
-
 
           <div class="form-group">
-
-            <label for="category">
-              Category
-            </label>
-
-            <input
-              id="category"
-              type="text"
-              formControlName="category"
-              placeholder="e.g. Shoes"
-            />
-
+            <label for="description">Description</label>
+            <textarea id="description" formControlName="description" placeholder="Enter product description" rows="4"></textarea>
+            @if (productForm.controls.description.touched && productForm.controls.description.hasError('required')) {
+              <p class="error">Description is required.</p>
+            }
           </div>
 
-        </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="price">Price</label>
+              <input id="price" type="number" formControlName="price" placeholder="0.00" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category" formControlName="category">
+                <option value="">Select a category</option>
+                <option value="Apparel">T-Shirts</option>
+                <option value="Jeans">Jeans</option>
+                <option value="Jackets">Jackets</option>
+                <option value="Dresses">Dresses</option>
+                <option value="Hoodies">Hoodies</option>
+                <option value="Suits">Suits</option>
+              </select>
+            </div>
+          </div>
 
+          <div class="form-row">
+            <div class="form-group">
+              <label for="color">Color</label>
+              <input id="color" type="text" formControlName="color" placeholder="e.g. Red" />
+            </div>
+            <div class="form-group">
+              <label for="size">Size</label>
+              <input id="size" type="text" formControlName="size" placeholder="e.g. M" />
+            </div>
+          </div>
 
-        <!-- Stock -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="stock">Count in Stock</label>
+              <input id="stock" type="number" formControlName="stock" placeholder="0" min="0" />
+            </div>
+            <div class="form-group featured-group">
+              <label>Featured Product</label>
+              <label class="toggle">
+                <input type="checkbox" formControlName="isFeatured" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
 
-        <div class="form-group">
+          <div class="form-group">
+            <label>Product Image</label>
+            <label for="image" class="upload-button">⬆ Upload Image</label>
+            <input id="image" type="file" accept="image/*" (change)="onImageSelected($event)" hidden />
+            @if (productForm.controls.image.value) {
+              <p class="file-name">Selected: {{ productForm.controls.image.value.name }}</p>
+            }
+          </div>
 
-          <label for="stock">
-            Count in Stock
-          </label>
-
-          <input
-            id="stock"
-            type="number"
-            formControlName="stock"
-            placeholder="Enter stock quantity"
-            min="0"
-          />
-
-        </div>
-
-
-        <!-- Image -->
-
-        <div class="form-group">
-
-          <label>
-            Product Image
-          </label>
-
-          <label
-            for="image"
-            class="upload-button"
-          >
-            Upload Image
-          </label>
-
-          <input
-            id="image"
-            type="file"
-            accept="image/*"
-            (change)="onImageSelected($event)"
-            hidden
-          />
-
-          @if (productForm.controls.image.value) {
-            <p class="file-name">
-              Selected:
-              {{ productForm.controls.image.value?.name }}
-            </p>
+          @if (successMessage()) {
+            <p class="success">{{ successMessage() }}</p>
+          }
+          @if (errorMessage()) {
+            <p class="error">{{ errorMessage() }}</p>
           }
 
-        </div>
+          <button type="submit" class="create-product-button" [disabled]="isSubmitting()">
+            {{ isSubmitting() ? 'Creating...' : '+ Create Product' }}
+          </button>
 
+        </form>
+      </div>
+    }
 
-        <!-- Create Product -->
+    @if (activeTab() === 'products') {
+      <div class="products-table-card">
+        @if (isLoadingProducts()) {
+          <p class="loading">Loading products...</p>
+        } @else {
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th>PRODUCT</th>
+                <th>PRICE</th>
+                <th>CATEGORY</th>
+                <th>IN STOCK</th>
+                <th>FEATURED</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (product of products(); track product.id) {
+                <tr>
+                  <td class="product-name-cell">
+                    <img [src]="product.image" [alt]="product.name" class="table-img" />
+                    {{ product.name }}
+                  </td>
+                  <td>${{ product.price }}</td>
+                  <td>{{ product.category }}</td>
+                  <td>{{ product.stock }}</td>
+                  <td>
+                    <button class="star-btn" (click)="toggleFeatured(product.id)" [class.featured]="product.isFeatured">
+                      ⭐
+                    </button>
+                  </td>
+                  <td>
+                    <button class="delete-btn" (click)="deleteProduct(product.id)">🗑</button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="6" class="empty">No products found.</td></tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
 
-        <button
-          type="submit"
-          class="create-product-button"
-        >
-          Create Product
-        </button>
-
-      </form>
-
-    </div>
+    @if (activeTab() === 'analytics') {
+      <div class="product-card">
+        <h2>Analytics</h2>
+        <p class="form-subtitle">Coming soon...</p>
+      </div>
+    }
 
   </div>
-
 </div>

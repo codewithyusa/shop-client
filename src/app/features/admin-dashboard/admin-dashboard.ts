@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Product } from '../../models/product.model';
+
+type Tab = 'create' | 'products' | 'analytics';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -14,78 +14,92 @@ import {
 })
 export class AdminDashboard {
   private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
+
+  activeTab = signal<Tab>('create');
+  isSubmitting = signal(false);
+  successMessage = signal('');
+  errorMessage = signal('');
+  products = signal<Product[]>([]);
+  isLoadingProducts = signal(false);
 
   productForm = this.fb.nonNullable.group({
-    productName: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(2)
-      ]
-    ],
-
-    description: [
-      '',
-      Validators.required
-    ],
-
-    price: [
-      0,
-      [
-        Validators.required,
-        Validators.min(0)
-      ]
-    ],
-
-    category: [
-      '',
-      Validators.required
-    ],
-
-    stock: [
-      0,
-      [
-        Validators.required,
-        Validators.min(0)
-      ]
-    ],
-
-    image: [
-      null as File | null,
-      Validators.required
-    ]
+    productName: ['', [Validators.required, Validators.minLength(2)]],
+    description: ['', Validators.required],
+    price: [0, [Validators.required, Validators.min(0)]],
+    category: ['', Validators.required],
+    color: ['', Validators.required],
+    size: ['', Validators.required],
+    stock: [0, [Validators.required, Validators.min(0)]],
+    isFeatured: [false],
+    image: [null as File | null, Validators.required]
   });
+
+  setTab(tab: Tab) {
+    this.activeTab.set(tab);
+    if (tab === 'products') this.loadProducts();
+  }
+
+  loadProducts() {
+    this.isLoadingProducts.set(true);
+    this.http.get<Product[]>('/api/products').subscribe({
+      next: (data) => { this.products.set(data); this.isLoadingProducts.set(false); },
+      error: () => this.isLoadingProducts.set(false)
+    });
+  }
+
+  deleteProduct(id: number) {
+    if (!confirm('Delete this product?')) return;
+    this.http.delete(`/api/products/${id}`).subscribe({
+      next: () => this.products.update(p => p.filter(x => x.id !== id))
+    });
+  }
+
+  toggleFeatured(id: number) {
+    this.http.patch(`/api/products/${id}/toggle-featured`, {}).subscribe({
+      next: (updated: any) => {
+        this.products.update(p => p.map(x => x.id === id ? { ...x, isFeatured: updated.isFeatured } : x));
+      }
+    });
+  }
 
   onImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-
-      this.productForm.controls.image.setValue(file);
+    if (input.files?.length) {
+      this.productForm.controls.image.setValue(input.files[0]);
       this.productForm.controls.image.markAsTouched();
     }
   }
 
   createProduct() {
-    if (this.productForm.invalid) {
-      this.productForm.markAllAsTouched();
-      return;
-    }
+    this.successMessage.set('');
+    this.errorMessage.set('');
+    if (this.productForm.invalid) { this.productForm.markAllAsTouched(); return; }
 
-    const product = this.productForm.getRawValue();
+    const val = this.productForm.getRawValue();
+    const payload = {
+      name: val.productName,
+      description: val.description,
+      price: val.price,
+      category: val.category,
+      color: val.color,
+      size: val.size,
+      stock: val.stock,
+      isFeatured: val.isFeatured,
+      image: 'https://placehold.co/400x400?text=' + encodeURIComponent(val.productName)
+    };
 
-    console.log('Product created:', product);
-
-    alert('Product created successfully!');
-
-    this.productForm.reset({
-      productName: '',
-      description: '',
-      price: 0,
-      category: '',
-      stock: 0,
-      image: null
+    this.isSubmitting.set(true);
+    this.http.post('/api/products', payload).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.successMessage.set('Product created successfully!');
+        this.productForm.reset({ productName: '', description: '', price: 0, category: '', color: '', size: '', stock: 0, isFeatured: false, image: null });
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.errorMessage.set(err.error?.detail ?? 'Failed to create product.');
+      }
     });
   }
 }
