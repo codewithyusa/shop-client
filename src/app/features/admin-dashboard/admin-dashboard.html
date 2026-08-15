@@ -1,0 +1,218 @@
+<div class="admin-page">
+
+  <div class="admin-container">
+
+    <div class="admin-header">
+      <h1>Admin Dashboard</h1>
+
+      <p>
+        Manage your products and store.
+      </p>
+    </div>
+
+
+    <!-- Dashboard navigation -->
+
+    <div class="dashboard-buttons">
+
+      <button
+        type="button"
+        class="dashboard-button active"
+      >
+        Create Product
+      </button>
+
+      <button
+        type="button"
+        class="dashboard-button"
+      >
+        Products
+      </button>
+
+      <button
+        type="button"
+        class="dashboard-button"
+      >
+        Analytics
+      </button>
+
+    </div>
+
+
+    <!-- Create Product -->
+
+    <div class="product-card">
+
+      <h2>Create New Product</h2>
+
+      <p class="form-subtitle">
+        Add a new product to your store.
+      </p>
+
+
+      <form
+        [formGroup]="productForm"
+        (ngSubmit)="createProduct()"
+      >
+
+        <!-- Product Name -->
+
+        <div class="form-group">
+
+          <label for="productName">
+            Product Name
+          </label>
+
+          <input
+            id="productName"
+            type="text"
+            formControlName="productName"
+            placeholder="Enter product name"
+          />
+
+          @if (
+            productForm.controls.productName.touched &&
+            productForm.controls.productName.hasError('required')
+          ) {
+            <p class="error">
+              Product name is required.
+            </p>
+          }
+
+        </div>
+
+
+        <!-- Description -->
+
+        <div class="form-group">
+
+          <label for="description">
+            Description
+          </label>
+
+          <textarea
+            id="description"
+            formControlName="description"
+            placeholder="Enter product description"
+            rows="5"
+          ></textarea>
+
+          @if (
+            productForm.controls.description.touched &&
+            productForm.controls.description.hasError('required')
+          ) {
+            <p class="error">
+              Description is required.
+            </p>
+          }
+
+        </div>
+
+
+        <!-- Price and Category -->
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label for="price">
+              Price
+            </label>
+
+            <input
+              id="price"
+              type="number"
+              formControlName="price"
+              placeholder="0.00"
+              min="0"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="category">
+              Category
+            </label>
+
+            <input
+              id="category"
+              type="text"
+              formControlName="category"
+              placeholder="e.g. Shoes"
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- Stock -->
+
+        <div class="form-group">
+
+          <label for="stock">
+            Count in Stock
+          </label>
+
+          <input
+            id="stock"
+            type="number"
+            formControlName="stock"
+            placeholder="Enter stock quantity"
+            min="0"
+          />
+
+        </div>
+
+
+        <!-- Image -->
+
+        <div class="form-group">
+
+          <label>
+            Product Image
+          </label>
+
+          <label
+            for="image"
+            class="upload-button"
+          >
+            Upload Image
+          </label>
+
+          <input
+            id="image"
+            type="file"
+            accept="image/*"
+            (change)="onImageSelected($event)"
+            hidden
+          />
+
+          @if (productForm.controls.image.value) {
+            <p class="file-name">
+              Selected:
+              {{ productForm.controls.image.value?.name }}
+            </p>
+          }
+
+        </div>
+
+
+        <!-- Create Product -->
+
+        <button
+          type="submit"
+          class="create-product-button"
+        >
+          Create Product
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

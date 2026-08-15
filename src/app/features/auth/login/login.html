@@ -1,0 +1,128 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+    <h1>Welcome Back</h1>
+
+    <p class="subtitle">
+      Login to your account to continue shopping.
+    </p>
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+    >
+
+      <!-- Email -->
+      <div class="form-group">
+
+        <label for="email">
+          Email Address
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email address"
+        />
+
+        @if (email.touched && email.hasError('required')) {
+          <p class="error">
+            Email address is required.
+          </p>
+        }
+
+        @if (email.touched && email.hasError('email')) {
+          <p class="error">
+            Please enter a valid email address.
+          </p>
+        }
+
+      </div>
+
+
+      <!-- Password -->
+      <div class="form-group">
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+
+        @if (password.touched && password.hasError('required')) {
+          <p class="error">
+            Password is required.
+          </p>
+        }
+
+        @if (password.touched && password.hasError('minlength')) {
+          <p class="error">
+            Password must be at least 8 characters.
+          </p>
+        }
+
+      </div>
+
+
+      <!-- Forgot Password -->
+      <div class="forgot-password">
+        <a routerLink="/forgot-password">
+          Forgot password?
+        </a>
+      </div>
+
+
+      <!-- Error Message -->
+      @if (errorMessage()) {
+        <p class="error">
+          {{ errorMessage() }}
+        </p>
+      }
+
+
+      <!-- Success Message -->
+      @if (successMessage()) {
+        <p class="success">
+          {{ successMessage() }}
+        </p>
+      }
+
+
+      <!-- Login Button -->
+      <button
+        type="submit"
+        [disabled]="isSubmitting()"
+      >
+
+        @if (isSubmitting()) {
+          Logging in...
+        } @else {
+          Login
+        }
+
+      </button>
+
+    </form>
+
+
+    <!-- Sign Up Link -->
+    <p class="signup-link">
+
+      Don't have an account?
+
+      <a routerLink="/signup">
+        Sign up →
+      </a>
+
+    </p>
+
+  </div>
+
+</div>

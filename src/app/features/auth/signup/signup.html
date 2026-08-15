@@ -1,0 +1,117 @@
+<div class="signup-page">
+  <div class="signup-card">
+
+    <h1>Create an account</h1>
+    <p class="subtitle">Sign up to start shopping with us.</p>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
+      <!-- Full Name -->
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+
+        <input
+          id="fullName"
+          type="text"
+          formControlName="fullName"
+          placeholder="Enter your full name"
+        />
+
+        @if (fullName.touched && fullName.hasError('required')) {
+          <p class="error">Full name is required.</p>
+        }
+
+        @if (fullName.touched && fullName.hasError('minlength')) {
+          <p class="error">Full name must be at least 2 characters.</p>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email address"
+        />
+
+        @if (email.touched && email.hasError('required')) {
+          <p class="error">Email address is required.</p>
+        }
+
+        @if (email.touched && email.hasError('email')) {
+          <p class="error">Please enter a valid email address.</p>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Create a password"
+        />
+
+        @if (password.touched && password.hasError('required')) {
+          <p class="error">Password is required.</p>
+        }
+
+        @if (password.touched && password.hasError('minlength')) {
+          <p class="error">Password must be at least 8 characters.</p>
+        }
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Confirm your password"
+        />
+
+        @if (confirmPassword.touched && confirmPassword.hasError('required')) {
+          <p class="error">Please confirm your password.</p>
+        }
+
+        @if (
+          confirmPassword.touched &&
+          signupForm.hasError('passwordMismatch')
+        ) {
+          <p class="error">Passwords do not match.</p>
+        }
+      </div>
+
+      <!-- Success -->
+      @if (successMessage()) {
+        <p class="success">{{ successMessage() }}</p>
+      }
+
+      <!-- Error -->
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="isSubmitting()"
+      >
+        {{ isSubmitting() ? 'Creating account...' : 'Create Account' }}
+      </button>
+
+    </form>
+
+    <div class="login-link">
+      <span>Already have an account?</span>
+      <a routerLink="/login">Login here →</a>
+    </div>
+
+  </div>
+</div>

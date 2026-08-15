@@ -2,7 +2,6 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 import { SignupRequest, LoginRequest, LoginResponse, User } from '../models/auth.model';
 
 const TOKEN_KEY = 'shop_token';
@@ -12,7 +11,7 @@ const USER_KEY = 'shop_user';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = `${environment.apiUrl}/auth`;
+  private baseUrl = '/api/auth';
 
   currentUser = signal<User | null>(this.readStoredUser());
   token = signal<string | null>(localStorage.getItem(TOKEN_KEY));

@@ -1,0 +1,50 @@
+<div class="verify-page">
+  <div class="verify-card">
+
+    <h1>Verify Your Email</h1>
+    <p class="subtitle">Enter the 6-digit code sent to your email.</p>
+
+    <form [formGroup]="verifyForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label for="code">Verification Code</label>
+        <input
+          id="code"
+          type="text"
+          formControlName="code"
+          placeholder="Enter 6-digit code"
+          maxlength="6"
+        />
+        @if (code.touched && code.hasError('required')) {
+          <p class="error">Code is required.</p>
+        }
+        @if (code.touched && code.hasError('minlength')) {
+          <p class="error">Code must be 6 digits.</p>
+        }
+      </div>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      @if (successMessage()) {
+        <p class="success">{{ successMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Verifying...' : 'Verify Email' }}
+      </button>
+
+    </form>
+
+    <p class="resend">
+      Didn't receive a code?
+      <button type="button" class="resend-btn" (click)="resendCode()">Resend</button>
+    </p>
+
+    <p class="back">
+      <a routerLink="/login">Back to Login</a>
+    </p>
+
+  </div>
+</div>
