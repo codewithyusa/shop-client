@@ -22,8 +22,6 @@ export interface LoginResponse {
   token: string;
   user: User;
 }
-
-// Matches ProblemDetails shape from GlobalExceptionHandler
 export interface ApiProblem {
   status: number;
   title: string;
