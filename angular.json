@@ -22,6 +22,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -63,7 +64,8 @@
               "buildTarget": "shop-client:build:production"
             },
             "development": {
-              "buildTarget": "shop-client:build:development"
+              "buildTarget": "shop-client:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
