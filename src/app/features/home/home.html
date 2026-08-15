@@ -3,43 +3,23 @@
   <section class="hero">
     <div class="hero-content">
       <p class="welcome">Welcome to YUSA SHOP</p>
-      <h1>Shop your favorite products</h1>
-      <p class="description">
-        Discover quality products at great prices.
-        Find everything you need in one place.
-      </p>
-      <a routerLink="/products" class="shop-button">Shop Now</a>
+      <h1>Explore Our Categories</h1>
+      <p class="description">Discover the latest trends in fashion</p>
     </div>
   </section>
 
-  <section class="products-section">
-    <h2>Featured Products</h2>
-    <p class="section-description">Explore our popular products.</p>
-
-    @if (isLoading()) {
-      <p class="loading">Loading products...</p>
-    } @else if (error()) {
-      <p class="error">{{ error() }}</p>
-    } @else if (products().length === 0) {
-      <p class="loading">No featured products available.</p>
-    } @else {
-      <div class="products">
-        @for (product of products(); track product.id) {
-          <div class="product-card">
-            <img
-              [src]="product.image"
-              [alt]="product.name"
-              class="product-image"
-            />
-            <h3>{{ product.name }}</h3>
-            <p class="price">${{ product.price }}</p>
-            <a [routerLink]="['/products', product.id]" class="view-button">
-              View Product
-            </a>
+  <section class="categories-section">
+    <div class="categories-grid">
+      @for (cat of categories; track cat.name) {
+        <a [routerLink]="['/products']" [queryParams]="{category: cat.filter}" class="category-card">
+          <img [src]="cat.image" [alt]="cat.name" class="category-image" />
+          <div class="category-overlay">
+            <h3>{{ cat.name }}</h3>
+            <p>{{ cat.description }}</p>
           </div>
-        }
-      </div>
-    }
-
+        </a>
+      }
+    </div>
   </section>
+
 </div>
