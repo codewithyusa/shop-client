@@ -1,7 +1,12 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Product } from '../../models/product.model';
+
+interface Category {
+  name: string;
+  description: string;
+  image: string;
+  filter: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -10,23 +15,13 @@ import { Product } from '../../models/product.model';
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home implements OnInit {
-  private http = inject(HttpClient);
-
-  products = signal<Product[]>([]);
-  isLoading = signal(true);
-  error = signal('');
-
-  ngOnInit() {
-    this.http.get<Product[]>('/api/products/featured').subscribe({
-      next: (data) => {
-        this.products.set(data);
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.error.set('Failed to load products.');
-        this.isLoading.set(false);
-      }
-    });
-  }
+export class Home {
+  categories: Category[] = [
+    { name: 'T-Shirts', description: 'Explore T-Shirts', image: 'images/images.jpg', filter: 'Apparel' },
+    { name: 'Jeans', description: 'Explore Jeans', image: 'images/images (5).jpg', filter: 'Jeans' },
+    { name: 'Jackets', description: 'Explore Jackets', image: 'images/images (6).jpg', filter: 'Jackets' },
+    { name: 'Dresses', description: 'Explore Dresses', image: 'images/images (7).jpg', filter: 'Dresses' },
+    { name: 'Hoodies', description: 'Explore Hoodies', image: 'images/images (8).jpg', filter: 'Hoodies' },
+    { name: 'Suits', description: 'Explore Suits', image: 'images/images (9).jpg', filter: 'Suits' },
+  ];
 }
