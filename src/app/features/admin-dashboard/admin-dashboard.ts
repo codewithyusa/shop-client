@@ -86,7 +86,6 @@ export class AdminDashboard {
       size: val.size,
       stock: val.stock,
       isFeatured: val.isFeatured,
-      image: 'https://placehold.co/400x400?text=' + encodeURIComponent(val.productName)
     };
 
     this.isSubmitting.set(true);
