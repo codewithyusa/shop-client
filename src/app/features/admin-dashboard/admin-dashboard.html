@@ -169,9 +169,35 @@
     }
 
     @if (activeTab() === 'analytics') {
-      <div class="product-card">
-        <h2>Analytics</h2>
-        <p class="form-subtitle">Coming soon...</p>
+      <div class="analytics-grid">
+        @if (isLoadingAnalytics()) {
+          <p class="loading">Loading analytics...</p>
+        } @else if (analytics()) {
+          <div class="stat-card">
+            <p class="stat-label">Total Revenue</p>
+            <p class="stat-value">${{ analytics().totalRevenue | number:'1.2-2' }}</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Total Orders</p>
+            <p class="stat-value">{{ analytics().totalOrders }}</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Pending Orders</p>
+            <p class="stat-value">{{ analytics().pendingOrders }}</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Total Users</p>
+            <p class="stat-value">{{ analytics().totalUsers }}</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Total Products</p>
+            <p class="stat-value">{{ analytics().totalProducts }}</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Avg Order Value</p>
+            <p class="stat-value">${{ analytics().averageOrderValue | number:'1.2-2' }}</p>
+          </div>
+        }
       </div>
     }
 

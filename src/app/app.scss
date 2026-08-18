@@ -244,12 +244,12 @@ main {
   }
 .cart-link {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -8px;
   background: #e53935;
   color: white;
   border-radius: 50%;
@@ -257,7 +257,7 @@ main {
   height: 18px;
   font-size: 11px;
   font-weight: 700;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }

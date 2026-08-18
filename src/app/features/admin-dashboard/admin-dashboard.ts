@@ -2,13 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../../models/product.model';
+import { DecimalPipe } from '@angular/common';
 
 type Tab = 'create' | 'products' | 'analytics';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DecimalPipe],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css'
 })
@@ -24,6 +25,8 @@ export class AdminDashboard {
   isLoadingProducts = signal(false);
   selectedFileName = signal('');
   imagePreview = signal('');
+  analytics = signal<any>(null);
+  isLoadingAnalytics = signal(false);
 
   productForm = this.fb.nonNullable.group({
     productName: ['', [Validators.required, Validators.minLength(2)]],
@@ -40,6 +43,7 @@ export class AdminDashboard {
   setTab(tab: Tab) {
     this.activeTab.set(tab);
     if (tab === 'products') this.loadProducts();
+    if (tab === 'analytics') this.loadAnalytics();
   }
 
   loadProducts() {
@@ -54,6 +58,17 @@ export class AdminDashboard {
         this.products.set([]);
         this.isLoadingProducts.set(false);
       }
+    });
+  }
+
+  loadAnalytics() {
+    this.isLoadingAnalytics.set(true);
+    this.http.get<any>('/api/analytics/summary').subscribe({
+      next: (data) => {
+        this.analytics.set(data);
+        this.isLoadingAnalytics.set(false);
+      },
+      error: () => this.isLoadingAnalytics.set(false)
     });
   }
 
@@ -79,7 +94,6 @@ export class AdminDashboard {
     if (input.files?.length) {
       const file = input.files[0];
       this.selectedFileName.set(file.name);
-      // Use placeholder URL - base64 is too large for backend
       const placeholderUrl = 'https://placehold.co/400x400?text=' +
         encodeURIComponent(file.name.split('.')[0]);
       this.productForm.controls.imageUrl.setValue(placeholderUrl);

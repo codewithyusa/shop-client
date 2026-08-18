@@ -99,16 +99,14 @@ h1 {
 }
 
 .item-quantity button {
-  width: 30px;
-  height: 30px;
   border: 1px solid #ddd;
   border-radius: 6px;
   background: white;
   cursor: pointer;
   font-size: 16px;
-  padding: 0;
+  padding: 4px 12px;
   width: auto;
-  padding: 0 10px;
+  height: auto;
 }
 
 .item-quantity button:hover {
