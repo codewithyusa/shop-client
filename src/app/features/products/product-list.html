@@ -1,1 +1,42 @@
-<p>product-list works!</p>
+<div class="products-page">
+
+  <div class="page-header">
+    <h1>{{ category() ? category() : 'All Products' }}</h1>
+    <p>{{ products().length }} products found</p>
+  </div>
+
+  <div class="search-bar">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      placeholder="Search products..."
+      (keyup.enter)="search()"
+    />
+    <button (click)="search()">Search</button>
+  </div>
+
+  @if (isLoading()) {
+    <p class="loading">Loading products...</p>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else if (products().length === 0) {
+    <p class="loading">No products found.</p>
+  } @else {
+    <div class="products-grid">
+      @for (product of products(); track product.id) {
+        <div class="product-card">
+          <a [routerLink]="['/products', product.id]">
+            <img [src]="product.image" [alt]="product.name" class="product-image" />
+          </a>
+          <div class="product-info">
+            <h3>{{ product.name }}</h3>
+            <p class="category">{{ product.category }}</p>
+            <p class="price">${{ product.price }}</p>
+            <a [routerLink]="['/products', product.id]" class="view-button">View Product</a>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</div>

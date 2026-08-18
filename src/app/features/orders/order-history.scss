@@ -1,0 +1,151 @@
+.orders-page {
+  min-height: calc(100vh - 70px);
+  background: #f7f7f7;
+  padding: 40px 20px;
+}
+
+.orders-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  color: #222;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.loading { text-align: center; color: #777; padding: 60px; }
+.error { text-align: center; color: #e53935; padding: 60px; }
+
+.empty {
+  text-align: center;
+  padding: 80px;
+}
+
+.empty p {
+  color: #777;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.shop-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #e53935;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.order-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.order-id {
+  font-weight: 700;
+  color: #222;
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+.order-date {
+  color: #777;
+  font-size: 14px;
+}
+
+.order-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #f0f0f0;
+  color: #555;
+}
+
+.badge.pending { background: #fff3e0; color: #e65100; }
+.badge.completed { background: #e8f5e9; color: #2e7d32; }
+.badge.cancelled { background: #ffebee; color: #c62828; }
+.badge.payment { background: #e3f2fd; color: #1565c0; }
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.item-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f0f0f0;
+}
+
+.item-name {
+  margin: 0 0 4px;
+  color: #222;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.item-qty {
+  margin: 0;
+  color: #777;
+  font-size: 13px;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total {
+  font-weight: 700;
+  color: #222;
+  font-size: 16px;
+}
+
+.cancel-btn {
+  padding: 8px 16px;
+  border: 1px solid #e53935;
+  border-radius: 8px;
+  background: white;
+  color: #e53935;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancel-btn:hover {
+  background: #e53935;
+  color: white;
+}

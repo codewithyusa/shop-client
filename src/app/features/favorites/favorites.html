@@ -1,1 +1,34 @@
-<p>favorites works!</p>
+<div class="favorites-page">
+  <div class="favorites-container">
+
+    <h1>My Favorites</h1>
+
+    @if (isLoading()) {
+      <p class="loading">Loading favorites...</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else if (favorites().length === 0) {
+      <div class="empty">
+        <p>No favorites yet.</p>
+        <a routerLink="/products" class="shop-btn">Browse Products</a>
+      </div>
+    } @else {
+      <div class="favorites-grid">
+        @for (item of favorites(); track item.id) {
+          <div class="favorite-card">
+            <img [src]="item.image" [alt]="item.productName" class="product-image" />
+            <div class="product-info">
+              <h3>{{ item.productName }}</h3>
+              <p class="price">${{ item.price }}</p>
+              <div class="actions">
+                <a [routerLink]="['/products', item.productId]" class="view-btn">View Product</a>
+                <button class="remove-btn" (click)="removeFavorite(item.productId)">♡ Remove</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>

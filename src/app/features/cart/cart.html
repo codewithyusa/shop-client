@@ -1,1 +1,51 @@
-<p>cart works!</p>
+<div class="cart-page">
+  <div class="cart-container">
+
+    <h1>Shopping Cart</h1>
+
+    @if (isLoading()) {
+      <p class="loading">Loading cart...</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else if (!cart() || cart()!.items.length === 0) {
+      <div class="empty-cart">
+        <p>Your cart is empty.</p>
+        <a routerLink="/products" class="shop-btn">Shop Now</a>
+      </div>
+    } @else {
+      <div class="cart-content">
+
+        <div class="cart-items">
+          @for (item of cart()!.items; track item.productId) {
+            <div class="cart-item">
+              <img [src]="item.image" [alt]="item.productName" class="item-image" />
+              <div class="item-details">
+                <h3>{{ item.productName }}</h3>
+                <p class="item-price">${{ item.price }}</p>
+              </div>
+              <div class="item-quantity">
+                <button (click)="updateQuantity(item.productId, item.quantity - 1)">−</button>
+                <span>{{ item.quantity }}</span>
+                <button (click)="updateQuantity(item.productId, item.quantity + 1)">+</button>
+              </div>
+              <p class="item-total">${{ item.price * item.quantity }}</p>
+              <button class="remove-btn" (click)="removeItem(item.productId)">🗑</button>
+            </div>
+          }
+        </div>
+
+        <div class="cart-summary">
+          <h2>Order Summary</h2>
+          <div class="summary-row">
+            <span>Total</span>
+            <span class="total">${{ getTotal() }}</span>
+          </div>
+          <a routerLink="/checkout" class="checkout-btn">Proceed to Checkout</a>
+          <a routerLink="/products" class="continue-btn">Continue Shopping</a>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</div>

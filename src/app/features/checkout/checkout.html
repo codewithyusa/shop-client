@@ -1,1 +1,31 @@
-<p>checkout works!</p>
+<div class="checkout-page">
+  <div class="checkout-container">
+
+    <h1>Checkout</h1>
+
+    <div class="checkout-card">
+      <h2>Complete Your Order</h2>
+      <p class="subtitle">Your cart items will be placed as an order.</p>
+
+      <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()">
+
+        <div class="form-group">
+          <label>Coupon Code (optional)</label>
+          <input type="text" formControlName="couponCode" placeholder="Enter coupon code" />
+        </div>
+
+        @if (errorMessage()) {
+          <p class="error">{{ errorMessage() }}</p>
+        }
+
+        <button type="submit" class="order-btn" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Placing Order...' : 'Place Order' }}
+        </button>
+
+        <a routerLink="/cart" class="back-link">← Back to Cart</a>
+
+      </form>
+    </div>
+
+  </div>
+</div>

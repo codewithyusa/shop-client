@@ -22,17 +22,19 @@ export class AdminDashboard {
   errorMessage = signal('');
   products = signal<Product[]>([]);
   isLoadingProducts = signal(false);
+  selectedFileName = signal('');
+  imagePreview = signal('');
 
   productForm = this.fb.nonNullable.group({
     productName: ['', [Validators.required, Validators.minLength(2)]],
     description: ['', Validators.required],
-    price: [0, [Validators.required, Validators.min(0)]],
+    price: [0.01, [Validators.required, Validators.min(0.01)]],
     category: ['', Validators.required],
     color: ['', Validators.required],
     size: ['', Validators.required],
     stock: [0, [Validators.required, Validators.min(0)]],
     isFeatured: [false],
-    image: [null as File | null, Validators.required]
+    imageUrl: ['', Validators.required]
   });
 
   setTab(tab: Tab) {
@@ -42,9 +44,16 @@ export class AdminDashboard {
 
   loadProducts() {
     this.isLoadingProducts.set(true);
-    this.http.get<Product[]>('/api/products').subscribe({
-      next: (data) => { this.products.set(data); this.isLoadingProducts.set(false); },
-      error: () => this.isLoadingProducts.set(false)
+    this.http.get<any>('/api/products').subscribe({
+      next: (data) => {
+        const list = Array.isArray(data) ? data : Array.isArray(data?.items) ? data.items : [];
+        this.products.set(list);
+        this.isLoadingProducts.set(false);
+      },
+      error: () => {
+        this.products.set([]);
+        this.isLoadingProducts.set(false);
+      }
     });
   }
 
@@ -58,7 +67,9 @@ export class AdminDashboard {
   toggleFeatured(id: number) {
     this.http.patch(`/api/products/${id}/toggle-featured`, {}).subscribe({
       next: (updated: any) => {
-        this.products.update(p => p.map(x => x.id === id ? { ...x, isFeatured: updated.isFeatured } : x));
+        this.products.update(p =>
+          p.map(x => x.id === id ? { ...x, isFeatured: updated.isFeatured } : x)
+        );
       }
     });
   }
@@ -66,15 +77,23 @@ export class AdminDashboard {
   onImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
-      this.productForm.controls.image.setValue(input.files[0]);
-      this.productForm.controls.image.markAsTouched();
+      const file = input.files[0];
+      this.selectedFileName.set(file.name);
+      // Use placeholder URL - base64 is too large for backend
+      const placeholderUrl = 'https://placehold.co/400x400?text=' +
+        encodeURIComponent(file.name.split('.')[0]);
+      this.productForm.controls.imageUrl.setValue(placeholderUrl);
+      this.imagePreview.set(placeholderUrl);
     }
   }
 
   createProduct() {
     this.successMessage.set('');
     this.errorMessage.set('');
-    if (this.productForm.invalid) { this.productForm.markAllAsTouched(); return; }
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
+      return;
+    }
 
     const val = this.productForm.getRawValue();
     const payload = {
@@ -86,6 +105,7 @@ export class AdminDashboard {
       size: val.size,
       stock: val.stock,
       isFeatured: val.isFeatured,
+      image: val.imageUrl
     };
 
     this.isSubmitting.set(true);
@@ -93,7 +113,14 @@ export class AdminDashboard {
       next: () => {
         this.isSubmitting.set(false);
         this.successMessage.set('Product created successfully!');
-        this.productForm.reset({ productName: '', description: '', price: 0, category: '', color: '', size: '', stock: 0, isFeatured: false, image: null });
+        this.selectedFileName.set('');
+        this.imagePreview.set('');
+        this.productForm.reset({
+          productName: '', description: '',
+          price: 0.01, category: '',
+          color: '', size: '',
+          stock: 0, isFeatured: false, imageUrl: ''
+        });
       },
       error: (err) => {
         this.isSubmitting.set(false);

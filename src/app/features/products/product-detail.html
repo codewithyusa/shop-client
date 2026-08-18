@@ -1,1 +1,50 @@
-<p>product-detail works!</p>
+<div class="detail-page">
+
+  @if (isLoading()) {
+    <p class="loading">Loading product...</p>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else if (product()) {
+    <div class="detail-container">
+
+      <div class="product-image-section">
+        <img [src]="product()!.image" [alt]="product()!.name" class="product-image" />
+      </div>
+
+      <div class="product-info-section">
+        <p class="category">{{ product()!.category }}</p>
+        <h1>{{ product()!.name }}</h1>
+        <p class="price">${{ product()!.price }}</p>
+        <p class="description">{{ product()!.description }}</p>
+
+        <div class="meta">
+          <span>Color: <strong>{{ product()!.color }}</strong></span>
+          <span>Size: <strong>{{ product()!.size }}</strong></span>
+          <span>In Stock: <strong>{{ product()!.stock }}</strong></span>
+        </div>
+
+        <div class="quantity-selector">
+          <button type="button" (click)="decrement()">−</button>
+          <span>{{ quantity() }}</span>
+          <button type="button" (click)="increment()">+</button>
+        </div>
+
+        @if (cartMessage()) {
+          <p class="cart-message">{{ cartMessage() }}</p>
+        }
+
+        <button class="add-to-cart" (click)="addToCart()" [disabled]="addingToCart()">
+          {{ addingToCart() ? 'Adding...' : 'Add to Cart' }}
+        </button>
+
+        <button class="favorite-btn" (click)="toggleFavorite()">
+          {{ isFavorited() ? '❤ Saved' : '♡ Save to Favorites' }}
+        </button>
+
+        <a routerLink="/products" class="back-link">← Back to Products</a>
+      </div>
+
+    </div>
+  }
+
+</div>

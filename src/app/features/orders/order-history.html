@@ -1,1 +1,52 @@
-<p>order-history works!</p>
+<div class="orders-page">
+  <div class="orders-container">
+
+    <h1>My Orders</h1>
+
+    @if (isLoading()) {
+      <p class="loading">Loading orders...</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else if (orders().length === 0) {
+      <div class="empty">
+        <p>You have no orders yet.</p>
+        <a routerLink="/products" class="shop-btn">Start Shopping</a>
+      </div>
+    } @else {
+      @for (order of orders(); track order.id) {
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <span class="order-id">Order #{{ order.id }}</span>
+              <span class="order-date">{{ order.createdAt | date:'mediumDate' }}</span>
+            </div>
+            <div class="order-badges">
+              <span class="badge" [class]="order.orderStatus.toLowerCase()">{{ order.orderStatus }}</span>
+              <span class="badge payment">{{ order.paymentStatus }}</span>
+            </div>
+          </div>
+
+          <div class="order-items">
+            @for (item of order.items; track item.productId) {
+              <div class="order-item">
+                <img [src]="item.image" [alt]="item.productName" class="item-img" />
+                <div class="item-info">
+                  <p class="item-name">{{ item.productName }}</p>
+                  <p class="item-qty">Qty: {{ item.quantity }} × ${{ item.price }}</p>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="order-footer">
+            <span class="total">Total: ${{ order.totalAmount }}</span>
+            @if (order.orderStatus === 'Pending') {
+              <button class="cancel-btn" (click)="cancelOrder(order.id)">Cancel Order</button>
+            }
+          </div>
+        </div>
+      }
+    }
+
+  </div>
+</div>

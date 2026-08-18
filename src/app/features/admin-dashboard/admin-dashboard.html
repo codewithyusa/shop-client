@@ -11,10 +11,10 @@
         + Create Product
       </button>
       <button type="button" [class.active]="activeTab() === 'products'" (click)="setTab('products')" class="dashboard-button">
-        🛒 Products
+        Products
       </button>
       <button type="button" [class.active]="activeTab() === 'analytics'" (click)="setTab('analytics')" class="dashboard-button">
-        📊 Analytics
+        Analytics
       </button>
     </div>
 
@@ -26,16 +26,16 @@
         <form [formGroup]="productForm" (ngSubmit)="createProduct()">
 
           <div class="form-group">
-            <label for="productName">Product Name</label>
-            <input id="productName" type="text" formControlName="productName" placeholder="Enter product name" />
+            <label>Product Name</label>
+            <input type="text" formControlName="productName" placeholder="Enter product name" />
             @if (productForm.controls.productName.touched && productForm.controls.productName.hasError('required')) {
               <p class="error">Product name is required.</p>
             }
           </div>
 
           <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" formControlName="description" placeholder="Enter product description" rows="4"></textarea>
+            <label>Description</label>
+            <textarea formControlName="description" placeholder="Enter product description" rows="4"></textarea>
             @if (productForm.controls.description.touched && productForm.controls.description.hasError('required')) {
               <p class="error">Description is required.</p>
             }
@@ -43,12 +43,12 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label for="price">Price</label>
-              <input id="price" type="number" formControlName="price" placeholder="0.00" min="0" />
+              <label>Price</label>
+              <input type="number" formControlName="price" placeholder="0.00" min="0.01" step="0.01" />
             </div>
             <div class="form-group">
-              <label for="category">Category</label>
-              <select id="category" formControlName="category">
+              <label>Category</label>
+              <select formControlName="category">
                 <option value="">Select a category</option>
                 <option value="Apparel">T-Shirts</option>
                 <option value="Jeans">Jeans</option>
@@ -57,24 +57,33 @@
                 <option value="Hoodies">Hoodies</option>
                 <option value="Suits">Suits</option>
               </select>
+              @if (productForm.controls.category.touched && productForm.controls.category.hasError('required')) {
+                <p class="error">Category is required.</p>
+              }
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="color">Color</label>
-              <input id="color" type="text" formControlName="color" placeholder="e.g. Red" />
+              <label>Color</label>
+              <input type="text" formControlName="color" placeholder="e.g. Black" />
+              @if (productForm.controls.color.touched && productForm.controls.color.hasError('required')) {
+                <p class="error">Color is required.</p>
+              }
             </div>
             <div class="form-group">
-              <label for="size">Size</label>
-              <input id="size" type="text" formControlName="size" placeholder="e.g. M" />
+              <label>Size</label>
+              <input type="text" formControlName="size" placeholder="e.g. M" />
+              @if (productForm.controls.size.touched && productForm.controls.size.hasError('required')) {
+                <p class="error">Size is required.</p>
+              }
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="stock">Count in Stock</label>
-              <input id="stock" type="number" formControlName="stock" placeholder="0" min="0" />
+              <label>Count in Stock</label>
+              <input type="number" formControlName="stock" placeholder="0" min="0" />
             </div>
             <div class="form-group featured-group">
               <label>Featured Product</label>
@@ -87,10 +96,18 @@
 
           <div class="form-group">
             <label>Product Image</label>
-            <label for="image" class="upload-button">⬆ Upload Image</label>
-            <input id="image" type="file" accept="image/*" (change)="onImageSelected($event)" hidden />
-            @if (productForm.controls.image.value) {
-              <p class="file-name">Selected: {{ productForm.controls.image.value.name }}</p>
+            <div class="image-upload-area">
+              <label for="imageFile" class="upload-button">⬆ Upload Image</label>
+              <input id="imageFile" type="file" accept="image/*" (change)="onImageSelected($event)" hidden />
+              @if (selectedFileName()) {
+                <span class="file-name">{{ selectedFileName() }}</span>
+              }
+            </div>
+            @if (productForm.controls.imageUrl.touched && !selectedFileName()) {
+              <p class="error">Image is required.</p>
+            }
+            @if (imagePreview()) {
+              <img [src]="imagePreview()" alt="Preview" class="image-preview" />
             }
           </div>
 
@@ -136,9 +153,7 @@
                   <td>{{ product.category }}</td>
                   <td>{{ product.stock }}</td>
                   <td>
-                    <button class="star-btn" (click)="toggleFeatured(product.id)" [class.featured]="product.isFeatured">
-                      ⭐
-                    </button>
+                    <button class="star-btn" (click)="toggleFeatured(product.id)" [class.featured]="product.isFeatured">⭐</button>
                   </td>
                   <td>
                     <button class="delete-btn" (click)="deleteProduct(product.id)">🗑</button>

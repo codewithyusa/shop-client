@@ -1,0 +1,103 @@
+.detail-page {
+  min-height: calc(100vh - 70px);
+  background: #f7f7f7;
+  padding: 40px 20px;
+}
+
+.detail-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+}
+
+.product-image {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  max-height: 450px;
+}
+
+.product-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.category {
+  color: #999;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+h1 { margin: 0; color: #222; font-size: 28px; font-weight: 700; }
+
+.price { color: #e53935; font-size: 28px; font-weight: 700; margin: 0; }
+
+.description { color: #555; font-size: 15px; line-height: 1.6; margin: 0; }
+
+.meta { display: flex; flex-direction: column; gap: 8px; color: #555; font-size: 14px; }
+
+.quantity-selector { display: flex; align-items: center; gap: 16px; }
+
+.quantity-selector button {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px 14px;
+  width: auto;
+}
+
+.quantity-selector button:hover { border-color: #e53935; color: #e53935; }
+
+.quantity-selector span { font-size: 18px; font-weight: 600; color: #222; min-width: 30px; text-align: center; }
+
+.add-to-cart {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #e53935;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-to-cart:hover { background: #c62828; }
+.add-to-cart:disabled { background: #f3a5a3; cursor: not-allowed; }
+
+.favorite-btn {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e53935;
+  border-radius: 8px;
+  background: white;
+  color: #e53935;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.favorite-btn:hover { background: #fff1f1; }
+
+.cart-message { color: #16a34a; font-weight: 600; text-align: center; margin: 0; }
+
+.back-link { color: #e53935; text-decoration: none; font-size: 14px; font-weight: 600; }
+.back-link:hover { text-decoration: underline; }
+
+.loading { text-align: center; color: #777; padding: 60px; }
+.error { text-align: center; color: #e53935; padding: 60px; }
+
+@media (max-width: 768px) {
+  .detail-container { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+}

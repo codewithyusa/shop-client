@@ -112,25 +112,45 @@ input:focus, textarea:focus, select:focus {
   box-shadow: 0 0 0 3px rgba(229,57,53,0.1);
 }
 
+.image-upload-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
 .upload-button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   padding: 11px 18px;
   border: 1px solid #e53935;
   border-radius: 8px;
   background: #ffffff;
   color: #e53935;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
   transition: 0.2s ease;
+  white-space: nowrap;
 }
 
 .upload-button:hover { background: #fff1f1; }
 
-.file-name { margin-top: 10px; color: #555; font-size: 13px; }
+.file-name {
+  color: #555;
+  font-size: 13px;
+}
+
+.image-preview {
+  margin-top: 10px;
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
 
 .error { margin: 6px 0 0; color: #e53935; font-size: 13px; }
-
 .success { margin: 12px 0; color: #16a34a; font-size: 14px; font-weight: 600; }
 
 .create-product-button {
@@ -150,7 +170,6 @@ input:focus, textarea:focus, select:focus {
 .create-product-button:hover { background: #c62828; }
 .create-product-button:disabled { background: #f3a5a3; cursor: not-allowed; }
 
-/* Toggle */
 .featured-group { display: flex; flex-direction: column; }
 
 .toggle { position: relative; display: inline-block; width: 50px; height: 26px; cursor: pointer; }
@@ -167,7 +186,6 @@ input:focus, textarea:focus, select:focus {
 .toggle input:checked + .toggle-slider { background: #e53935; }
 .toggle input:checked + .toggle-slider:before { transform: translateX(24px); }
 
-/* Products Table */
 .products-table-card {
   background: #ffffff;
   border-radius: 14px;
