@@ -91,21 +91,30 @@ export class AdminDashboard {
 
   onImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files?.length) {
-      const file = input.files[0];
-      this.selectedFileName.set(file.name);
-      const placeholderUrl = 'https://placehold.co/400x400?text=' +
-        encodeURIComponent(file.name.split('.')[0]);
-      this.productForm.controls.imageUrl.setValue(placeholderUrl);
-      this.imagePreview.set(placeholderUrl);
-    }
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+    this.selectedFileName.set(file.name);
+
+    // Show real local preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview.set(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    // Store short placeholder URL in DB (stays under 500 chars)
+    const placeholderUrl = `https://placehold.co/400x400?text=${encodeURIComponent(file.name.split('.')[0])}`;
+    this.productForm.controls.imageUrl.setValue(placeholderUrl);
   }
 
   createProduct() {
     this.successMessage.set('');
     this.errorMessage.set('');
+
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
+      this.errorMessage.set('One or more fields are invalid. See errors for details.');
       return;
     }
 

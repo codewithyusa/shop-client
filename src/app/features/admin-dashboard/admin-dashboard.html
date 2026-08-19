@@ -31,6 +31,9 @@
             @if (productForm.controls.productName.touched && productForm.controls.productName.hasError('required')) {
               <p class="error">Product name is required.</p>
             }
+            @if (productForm.controls.productName.touched && productForm.controls.productName.hasError('minlength')) {
+              <p class="error">Product name must be at least 2 characters.</p>
+            }
           </div>
 
           <div class="form-group">
@@ -98,12 +101,18 @@
             <label>Product Image</label>
             <div class="image-upload-area">
               <label for="imageFile" class="upload-button">⬆ Upload Image</label>
-              <input id="imageFile" type="file" accept="image/*" (change)="onImageSelected($event)" hidden />
+              <input
+                id="imageFile"
+                type="file"
+                accept="image/*"
+                (change)="onImageSelected($event)"
+                hidden
+              />
               @if (selectedFileName()) {
                 <span class="file-name">{{ selectedFileName() }}</span>
               }
             </div>
-            @if (productForm.controls.imageUrl.touched && !selectedFileName()) {
+            @if (productForm.controls.imageUrl.touched && productForm.controls.imageUrl.hasError('required')) {
               <p class="error">Image is required.</p>
             }
             @if (imagePreview()) {
