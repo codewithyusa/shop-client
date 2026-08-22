@@ -1,13 +1,9 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
+import { adminGuard } from './core/admin.guard';
 
 export const routes: Routes = [
-  {
-    path: 'home',
-    loadComponent: () =>
-      import('./features/home/home').then(m => m.Home),
-    canActivate: [authGuard]
-  },
+  // Public routes
   {
     path: 'signup',
     loadComponent: () =>
@@ -28,16 +24,30 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/forgot-password/forgot-password').then(m => m.ForgotPassword)
   },
-  {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('./features/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
-    canActivate: [authGuard]
-  },
+
+  // Admin only
   {
     path: 'admin',
     loadComponent: () =>
       import('./features/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
+    canActivate: [adminGuard]
+  },
+  {
+    path: 'admin/login',
+    loadComponent: () =>
+      import('./features/admin-login/admin-login').then(m => m.AdminLoginComponent)
+  },
+  {
+    path: 'admin/signup',
+    loadComponent: () =>
+      import('./features/admin-signup/admin-signup').then(m => m.AdminSignupComponent)
+  },
+
+  // Customer routes
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./features/home/home').then(m => m.Home),
     canActivate: [authGuard]
   },
   {
@@ -82,9 +92,15 @@ export const routes: Routes = [
       import('./features/profile/profile').then(m => m.Profile),
     canActivate: [authGuard]
   },
+
+  // Fallback
   {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',
   },
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 ];

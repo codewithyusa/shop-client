@@ -1,0 +1,48 @@
+<div class="login-page admin-theme">
+  <div class="login-card">
+
+    <div class="admin-badge">🔐 Admin Portal</div>
+    <h1>Admin Login</h1>
+    <p class="subtitle">Sign in to manage your store.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" formControlName="email" placeholder="Enter admin email" />
+        @if (email.touched && email.hasError('required')) {
+          <p class="error">Email is required.</p>
+        }
+        @if (email.touched && email.hasError('email')) {
+          <p class="error">Please enter a valid email.</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="Enter password" />
+        @if (password.touched && password.hasError('required')) {
+          <p class="error">Password is required.</p>
+        }
+        @if (password.touched && password.hasError('minlength')) {
+          <p class="error">Password must be at least 8 characters.</p>
+        }
+      </div>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Signing in...' : 'Sign In' }}
+      </button>
+
+    </form>
+
+    <p class="signup-link">
+      Need an admin account?
+      <a routerLink="/admin/signup">Create one →</a>
+    </p>
+
+  </div>
+</div>

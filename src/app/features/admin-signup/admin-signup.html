@@ -1,0 +1,69 @@
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="admin-badge">🔐 Admin Portal</div>
+    <h1>Create Admin Account</h1>
+    <p class="subtitle">Register a new admin account.</p>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input id="fullName" type="text" formControlName="fullName" placeholder="Enter full name" />
+        @if (fullName.touched && fullName.hasError('required')) {
+          <p class="error">Full name is required.</p>
+        }
+        @if (fullName.touched && fullName.hasError('minlength')) {
+          <p class="error">Full name must be at least 2 characters.</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" formControlName="email" placeholder="Enter admin email" />
+        @if (email.touched && email.hasError('required')) {
+          <p class="error">Email is required.</p>
+        }
+        @if (email.touched && email.hasError('email')) {
+          <p class="error">Please enter a valid email.</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="Create a password" />
+        @if (password.touched && password.hasError('required')) {
+          <p class="error">Password is required.</p>
+        }
+        @if (password.touched && password.hasError('minlength')) {
+          <p class="error">Password must be at least 8 characters.</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirm your password" />
+        @if (confirmPassword.touched && confirmPassword.hasError('required')) {
+          <p class="error">Please confirm your password.</p>
+        }
+        @if (confirmPassword.touched && signupForm.hasError('passwordMismatch')) {
+          <p class="error">Passwords do not match.</p>
+        }
+      </div>
+
+      @if (successMessage()) { <p class="success">{{ successMessage() }}</p> }
+      @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
+
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Creating...' : 'Create Admin Account' }}
+      </button>
+
+    </form>
+
+    <p class="signup-link">
+      Already have an account?
+      <a routerLink="/admin/login">Login →</a>
+    </p>
+
+  </div>
+</div>

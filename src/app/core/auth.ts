@@ -19,8 +19,11 @@ export class AuthService {
   isLoggedIn = computed(() => !!this.token());
   isAdmin = computed(() => this.currentUser()?.role === 'admin');
 
-  signup(payload: SignupRequest) {
-    return this.http.post<User>(`${this.baseUrl}/signup`, payload);
+  signup(payload: SignupRequest, isAdmin = false) {
+    const url = isAdmin
+      ? `${this.baseUrl}/admin/signup`
+      : `${this.baseUrl}/signup`;
+    return this.http.post<User>(url, payload);
   }
 
   login(payload: LoginRequest) {

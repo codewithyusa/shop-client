@@ -13,6 +13,9 @@
       <button type="button" [class.active]="activeTab() === 'products'" (click)="setTab('products')" class="dashboard-button">
         Products
       </button>
+      <button type="button" [class.active]="activeTab() === 'users'" (click)="setTab('users')" class="dashboard-button">
+        Users
+      </button>
       <button type="button" [class.active]="activeTab() === 'analytics'" (click)="setTab('analytics')" class="dashboard-button">
         Analytics
       </button>
@@ -20,11 +23,10 @@
 
     @if (activeTab() === 'create') {
       <div class="product-card">
-        <h2>Create New Product</h2>
-        <p class="form-subtitle">Add a new product to your store.</p>
+        <h2>{{ editingProduct() ? 'Edit Product' : 'Create New Product' }}</h2>
+        <p class="form-subtitle">{{ editingProduct() ? 'Update the product details.' : 'Add a new product to your store.' }}</p>
 
         <form [formGroup]="productForm" (ngSubmit)="createProduct()">
-
           <div class="form-group">
             <label>Product Name</label>
             <input type="text" formControlName="productName" placeholder="Enter product name" />
@@ -101,13 +103,7 @@
             <label>Product Image</label>
             <div class="image-upload-area">
               <label for="imageFile" class="upload-button">⬆ Upload Image</label>
-              <input
-                id="imageFile"
-                type="file"
-                accept="image/*"
-                (change)="onImageSelected($event)"
-                hidden
-              />
+              <input id="imageFile" type="file" accept="image/*" (change)="onImageSelected($event)" hidden />
               @if (selectedFileName()) {
                 <span class="file-name">{{ selectedFileName() }}</span>
               }
@@ -120,17 +116,19 @@
             }
           </div>
 
-          @if (successMessage()) {
-            <p class="success">{{ successMessage() }}</p>
-          }
-          @if (errorMessage()) {
-            <p class="error">{{ errorMessage() }}</p>
-          }
+          @if (successMessage()) { <p class="success">{{ successMessage() }}</p> }
+          @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
 
-          <button type="submit" class="create-product-button" [disabled]="isSubmitting()">
-            {{ isSubmitting() ? 'Creating...' : '+ Create Product' }}
-          </button>
-
+          <div class="form-actions">
+            <button type="submit" class="create-product-button" [disabled]="isSubmitting()">
+              {{ isSubmitting() ? 'Saving...' : editingProduct() ? '✔ Update Product' : '+ Create Product' }}
+            </button>
+            @if (editingProduct()) {
+              <button type="button" class="cancel-button" (click)="cancelEdit()">
+                Cancel
+              </button>
+            }
+          </div>
         </form>
       </div>
     }
@@ -164,12 +162,53 @@
                   <td>
                     <button class="star-btn" (click)="toggleFeatured(product.id)" [class.featured]="product.isFeatured">⭐</button>
                   </td>
-                  <td>
-                    <button class="delete-btn" (click)="deleteProduct(product.id)">🗑</button>
+                  <td class="actions-cell">
+                    <button class="edit-btn" (click)="editProduct(product)" title="Edit">✏️</button>
+                    <button class="delete-btn" (click)="deleteProduct(product.id)" title="Delete">🗑</button>
                   </td>
                 </tr>
               } @empty {
                 <tr><td colspan="6" class="empty">No products found.</td></tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+
+    @if (activeTab() === 'users') {
+      <div class="products-table-card">
+        @if (isLoadingUsers()) {
+          <p class="loading">Loading users...</p>
+        } @else {
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>PHONE</th>
+                <th>ROLE</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of users(); track user.id) {
+                <tr>
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.phone ?? '—' }}</td>
+                  <td>
+                    <select (change)="updateUserRole(user.id, $any($event.target).value)">
+                      <option value="customer" [selected]="user.role === 'customer'">Customer</option>
+                      <option value="admin" [selected]="user.role === 'admin'">Admin</option>
+                    </select>
+                  </td>
+                  <td>
+                    <button class="delete-btn" (click)="deleteUser(user.id)">🗑</button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="5" class="empty">No users found.</td></tr>
               }
             </tbody>
           </table>
