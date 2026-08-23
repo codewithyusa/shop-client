@@ -27,6 +27,7 @@ export class AdminDashboard {
 
   activeTab = signal<Tab>('create');
   isSubmitting = signal(false);
+  isUploadingImage = signal(false);
   successMessage = signal('');
   errorMessage = signal('');
   products = signal<Product[]>([]);
@@ -100,10 +101,7 @@ export class AdminDashboard {
         this.users.set(list);
         this.isLoadingUsers.set(false);
       },
-      error: () => {
-        this.users.set([]);
-        this.isLoadingUsers.set(false);
-      }
+      error: () => { this.users.set([]); this.isLoadingUsers.set(false); }
     });
   }
 
@@ -117,9 +115,7 @@ export class AdminDashboard {
   updateUserRole(id: number, role: string) {
     this.http.put(`/api/admin/users/${id}/role`, { role }).subscribe({
       next: (updated: any) => {
-        this.users.update(u =>
-          u.map(x => x.id === id ? { ...x, role: updated.role } : x)
-        );
+        this.users.update(u => u.map(x => x.id === id ? { ...x, role: updated.role } : x));
       }
     });
   }
@@ -132,20 +128,14 @@ export class AdminDashboard {
         this.products.set(list);
         this.isLoadingProducts.set(false);
       },
-      error: () => {
-        this.products.set([]);
-        this.isLoadingProducts.set(false);
-      }
+      error: () => { this.products.set([]); this.isLoadingProducts.set(false); }
     });
   }
 
   loadAnalytics() {
     this.isLoadingAnalytics.set(true);
     this.http.get<any>('/api/analytics/summary').subscribe({
-      next: (data) => {
-        this.analytics.set(data);
-        this.isLoadingAnalytics.set(false);
-      },
+      next: (data) => { this.analytics.set(data); this.isLoadingAnalytics.set(false); },
       error: () => this.isLoadingAnalytics.set(false)
     });
   }
@@ -160,9 +150,7 @@ export class AdminDashboard {
   toggleFeatured(id: number) {
     this.http.patch(`/api/products/${id}/toggle-featured`, {}).subscribe({
       next: (updated: any) => {
-        this.products.update(p =>
-          p.map(x => x.id === id ? { ...x, isFeatured: updated.isFeatured } : x)
-        );
+        this.products.update(p => p.map(x => x.id === id ? { ...x, isFeatured: updated.isFeatured } : x));
       }
     });
   }
@@ -172,11 +160,28 @@ export class AdminDashboard {
     if (!input.files?.length) return;
     const file = input.files[0];
     this.selectedFileName.set(file.name);
+
+    // Local preview
     const reader = new FileReader();
     reader.onload = () => this.imagePreview.set(reader.result as string);
     reader.readAsDataURL(file);
-    const placeholderUrl = `https://placehold.co/400x400?text=${encodeURIComponent(file.name.split('.')[0])}`;
-    this.productForm.controls.imageUrl.setValue(placeholderUrl);
+
+    // Upload to Cloudinary via backend
+    const formData = new FormData();
+    formData.append('file', file);
+    this.isUploadingImage.set(true);
+    this.errorMessage.set('');
+
+    this.http.post<{ url: string }>('/api/products/upload-image', formData).subscribe({
+      next: (res) => {
+        this.productForm.controls.imageUrl.setValue(res.url);
+        this.isUploadingImage.set(false);
+      },
+      error: () => {
+        this.errorMessage.set('Image upload failed.');
+        this.isUploadingImage.set(false);
+      }
+    });
   }
 
   createProduct() {
@@ -196,18 +201,14 @@ export class AdminDashboard {
       image: val.imageUrl
     };
     this.isSubmitting.set(true);
-
     const editing = this.editingProduct();
 
     if (editing) {
-      // UPDATE
       this.http.put(`/api/products/${editing.id}`, payload).subscribe({
         next: (updated: any) => {
           this.isSubmitting.set(false);
           this.successMessage.set('Product updated successfully!');
-          this.products.update(p =>
-            p.map(x => x.id === editing.id ? { ...x, ...updated } : x)
-          );
+          this.products.update(p => p.map(x => x.id === editing.id ? { ...x, ...updated } : x));
           this.cancelEdit();
         },
         error: (err: any) => {
@@ -216,7 +217,6 @@ export class AdminDashboard {
         }
       });
     } else {
-      // CREATE
       this.http.post('/api/products', payload).subscribe({
         next: () => {
           this.isSubmitting.set(false);

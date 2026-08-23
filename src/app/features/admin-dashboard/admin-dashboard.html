@@ -104,8 +104,10 @@
             <div class="image-upload-area">
               <label for="imageFile" class="upload-button">⬆ Upload Image</label>
               <input id="imageFile" type="file" accept="image/*" (change)="onImageSelected($event)" hidden />
-              @if (selectedFileName()) {
-                <span class="file-name">{{ selectedFileName() }}</span>
+              @if (isUploadingImage()) {
+                <span class="file-name">⏳ Uploading to Cloudinary...</span>
+              } @else if (selectedFileName()) {
+                <span class="file-name">✅ {{ selectedFileName() }}</span>
               }
             </div>
             @if (productForm.controls.imageUrl.touched && productForm.controls.imageUrl.hasError('required')) {
@@ -120,13 +122,12 @@
           @if (errorMessage()) { <p class="error">{{ errorMessage() }}</p> }
 
           <div class="form-actions">
-            <button type="submit" class="create-product-button" [disabled]="isSubmitting()">
-              {{ isSubmitting() ? 'Saving...' : editingProduct() ? '✔ Update Product' : '+ Create Product' }}
+            <button type="submit" class="create-product-button"
+              [disabled]="isSubmitting() || isUploadingImage()">
+              {{ isUploadingImage() ? '⬆ Uploading...' : isSubmitting() ? 'Saving...' : editingProduct() ? '✔ Update Product' : '+ Create Product' }}
             </button>
             @if (editingProduct()) {
-              <button type="button" class="cancel-button" (click)="cancelEdit()">
-                Cancel
-              </button>
+              <button type="button" class="cancel-button" (click)="cancelEdit()">Cancel</button>
             }
           </div>
         </form>
