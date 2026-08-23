@@ -32,7 +32,7 @@ export class ProductList implements OnInit {
   loadProducts(category: string) {
     this.isLoading.set(true);
     const url = category
-      ? `/api/products?category=${encodeURIComponent(category)}`
+      ? `/api/products/category/${encodeURIComponent(category)}`
       : '/api/products';
 
     this.http.get<any>(url).subscribe({
