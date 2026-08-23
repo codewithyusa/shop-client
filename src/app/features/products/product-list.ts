@@ -20,6 +20,7 @@ export class ProductList implements OnInit {
   error = signal('');
   category = signal('');
   searchQuery = '';
+  favorites = signal<Set<number>>(new Set());
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -27,6 +28,33 @@ export class ProductList implements OnInit {
       this.category.set(cat);
       this.loadProducts(cat);
     });
+    this.loadFavorites();
+  }
+
+  loadFavorites() {
+    this.http.get<any[]>('/api/favorites').subscribe({
+      next: (data) => {
+        const ids = new Set(data.map((f: any) => f.productId ?? f.id));
+        this.favorites.set(ids as Set<number>);
+      }
+    });
+  }
+
+  toggleFavorite(event: Event, productId: number) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.http.post<{ isFavorited: boolean }>(`/api/favorites/${productId}/toggle`, {}).subscribe({
+      next: (res) => {
+        const current = new Set(this.favorites());
+        if (res.isFavorited) current.add(productId);
+        else current.delete(productId);
+        this.favorites.set(current);
+      }
+    });
+  }
+
+  isFavorited(productId: number): boolean {
+    return this.favorites().has(productId);
   }
 
   loadProducts(category: string) {
@@ -34,7 +62,6 @@ export class ProductList implements OnInit {
     const url = category
       ? `/api/products/category/${encodeURIComponent(category)}`
       : '/api/products';
-
     this.http.get<any>(url).subscribe({
       next: (data) => {
         const list = Array.isArray(data) ? data : (data.items ?? []);
@@ -49,10 +76,7 @@ export class ProductList implements OnInit {
   }
 
   search() {
-    if (!this.searchQuery.trim()) {
-      this.loadProducts(this.category());
-      return;
-    }
+    if (!this.searchQuery.trim()) { this.loadProducts(this.category()); return; }
     this.isLoading.set(true);
     this.http.get<any>(`/api/products/search?name=${encodeURIComponent(this.searchQuery)}`).subscribe({
       next: (data) => {
@@ -60,10 +84,7 @@ export class ProductList implements OnInit {
         this.products.set(list);
         this.isLoading.set(false);
       },
-      error: () => {
-        this.error.set('Search failed.');
-        this.isLoading.set(false);
-      }
+      error: () => { this.error.set('Search failed.'); this.isLoading.set(false); }
     });
   }
 }

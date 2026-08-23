@@ -26,11 +26,21 @@
       @for (product of products(); track product.id) {
         <div class="product-card">
           <a [routerLink]="['/products', product.id]">
-            <img [src]="product.image" [alt]="product.name" class="product-image" />
+            <div class="product-image-wrap">
+              <img [src]="product.image" [alt]="product.name" class="product-image" />
+              <button
+                class="fav-btn"
+                (click)="toggleFavorite($event, product.id)"
+                [class.favorited]="isFavorited(product.id)"
+                [attr.aria-label]="isFavorited(product.id) ? 'Remove from favorites' : 'Add to favorites'"
+              >
+                {{ isFavorited(product.id) ? '❤' : '♡' }}
+              </button>
+            </div>
           </a>
           <div class="product-info">
-            <h3>{{ product.name }}</h3>
             <p class="category">{{ product.category }}</p>
+            <h3>{{ product.name }}</h3>
             <p class="price">${{ product.price }}</p>
             <a [routerLink]="['/products', product.id]" class="view-button">View Product</a>
           </div>
