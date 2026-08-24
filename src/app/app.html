@@ -21,7 +21,7 @@
         </a>
         <a class="nav-link" routerLink="/favorites" routerLinkActive="active">Favorites</a>
         @if (isAdmin()) {
-          <a class="dashboard-button" routerLink="/dashboard">Dashboard</a>
+          <a class="dashboard-button" routerLink="/admin">Dashboard</a>
         }
         <button class="logout-button" type="button" (click)="logout()">Logout</button>
         <a routerLink="/profile" class="user-button" title="Account">👤</a>
