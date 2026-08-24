@@ -4,10 +4,11 @@ import { AuthService } from './core/auth';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
+import { FooterComponent } from './shared/footer';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, FooterComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

@@ -1,18 +1,81 @@
 <div class="checkout-page">
-  <div class="checkout-container">
 
+  <div class="checkout-hero">
     <h1>Checkout</h1>
+    <p>Complete your order</p>
+    <a routerLink="/cart" class="back-link">← Back to Cart</a>
+  </div>
 
-    <div class="checkout-card">
-      <h2>Complete Your Order</h2>
-      <p class="subtitle">Your cart items will be placed as an order.</p>
+  <div class="checkout-container">
+    <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()">
 
-      <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()">
+      <div class="checkout-left">
+        <h2>Payment Information</h2>
+        <p class="subtitle">Enter your information to complete your order.</p>
 
-        <div class="form-group">
-          <label>Coupon Code (optional)</label>
-          <input type="text" formControlName="couponCode" placeholder="Enter coupon code" />
+        <div class="section">
+          <h3>Customer Information</h3>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" formControlName="fullName" placeholder="Enter your full name" />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" formControlName="email" placeholder="Enter your email" />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" formControlName="phone" placeholder="Enter your phone number" />
+          </div>
         </div>
+
+        <div class="section">
+          <h3>Shipping Address</h3>
+          <div class="form-group">
+            <label>Address</label>
+            <input type="text" formControlName="address" placeholder="Street address" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" formControlName="city" placeholder="City" />
+            </div>
+            <div class="form-group">
+              <label>Postal Code</label>
+              <input type="text" formControlName="postalCode" placeholder="Postal code" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Payment Method</h3>
+          <div class="payment-option" [class.selected]="selectedPayment() === 'card'" (click)="selectPayment('card')">
+            <input type="radio" [checked]="selectedPayment() === 'card'" readonly /> 💳 Credit / Debit Card
+          </div>
+          <div class="payment-option" [class.selected]="selectedPayment() === 'cash'" (click)="selectPayment('cash')">
+            <input type="radio" [checked]="selectedPayment() === 'cash'" readonly /> 💵 Cash on Delivery
+          </div>
+        </div>
+
+        @if (selectedPayment() === 'card') {
+          <div class="section">
+            <h3>Card Information</h3>
+            <div class="form-group">
+              <label>Card Number</label>
+              <input type="text" formControlName="cardNumber" placeholder="1234 5678 9012 3456" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Expiry Date</label>
+                <input type="text" formControlName="expiry" placeholder="MM/YY" />
+              </div>
+              <div class="form-group">
+                <label>CVV</label>
+                <input type="text" formControlName="cvv" placeholder="123" />
+              </div>
+            </div>
+          </div>
+        }
 
         @if (errorMessage()) {
           <p class="error">{{ errorMessage() }}</p>
@@ -22,9 +85,51 @@
           {{ isSubmitting() ? 'Placing Order...' : 'Place Order' }}
         </button>
 
-        <a routerLink="/cart" class="back-link">← Back to Cart</a>
+        <a routerLink="/cart" class="back-link-bottom">← Return to Cart</a>
+      </div>
 
-      </form>
+    </form>
+
+    <div class="checkout-right">
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+
+        @for (item of cartItems(); track item.productId) {
+          <div class="summary-item">
+            <div class="summary-img-wrap">
+              <img [src]="item.image" [alt]="item.productName" />
+              <span class="qty-badge">{{ item.quantity }}</span>
+            </div>
+            <div class="summary-item-info">
+              <p class="summary-item-name">{{ item.productName }}</p>
+              <p class="summary-item-price">${{ item.price.toFixed(2) }}</p>
+            </div>
+            <p class="summary-item-total">${{ (item.price * item.quantity).toFixed(2) }}</p>
+          </div>
+        }
+
+        <div class="divider"></div>
+
+        <div class="summary-row">
+          <span>Items</span>
+          <span>{{ getTotalItems() }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>${{ getSubtotal().toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>FREE</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="summary-total">
+          <span>Total</span>
+          <span class="total-amount">${{ getSubtotal().toFixed(2) }}</span>
+        </div>
+      </div>
     </div>
 
   </div>

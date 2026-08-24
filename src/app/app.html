@@ -34,3 +34,7 @@
 <main>
   <router-outlet></router-outlet>
 </main>
+
+@if (!isAuthPage()) {
+  <app-footer></app-footer>
+}

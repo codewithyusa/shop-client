@@ -1,0 +1,142 @@
+.success-page {
+  min-height: calc(100vh - 70px);
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 20px;
+}
+
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  animation: confetti-fall linear infinite;
+  border-radius: 2px;
+}
+
+@keyframes confetti-fall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+.success-card {
+  position: relative;
+  z-index: 1;
+  background: white;
+  border-radius: 20px;
+  padding: 48px 40px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.check-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #e53935;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop {
+  0%   { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+.check {
+  color: white;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+h1 {
+  margin: 0 0 12px;
+  color: #222;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.msg {
+  color: #444;
+  font-size: 15px;
+  margin: 0 0 6px;
+}
+
+.sub-msg {
+  color: #999;
+  font-size: 13px;
+  margin: 0 0 28px;
+}
+
+.order-info {
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #555;
+  padding: 6px 0;
+}
+
+.info-row:not(:last-child) { border-bottom: 1px solid #eee; }
+
+.info-row span:last-child {
+  font-weight: 600;
+  color: #222;
+}
+
+.orders-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: #e53935;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  transition: background 0.2s;
+}
+
+.orders-btn:hover { background: #c62828; }
+
+.continue-btn {
+  display: block;
+  color: #e53935;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.continue-btn:hover { text-decoration: underline; }
+
+@media (max-width: 480px) {
+  .success-card { padding: 32px 20px; }
+}

@@ -1,0 +1,35 @@
+<div class="success-page">
+
+  <div class="confetti-container">
+    @for (c of confettiItems; track $index) {
+      <div class="confetti-piece" [style]="c"></div>
+    }
+  </div>
+
+  <div class="success-card">
+    <div class="check-circle">
+      <span class="check">✓</span>
+    </div>
+
+    <h1>Order Placed!</h1>
+    <p class="msg">Thank you for your purchase. We're processing it now.</p>
+    <p class="sub-msg">Check your email for order details and updates.</p>
+
+    @if (orderId()) {
+      <div class="order-info">
+        <div class="info-row">
+          <span>Order number</span>
+          <span>#{{ orderId() }}</span>
+        </div>
+        <div class="info-row">
+          <span>Estimated delivery</span>
+          <span>3–5 business days</span>
+        </div>
+      </div>
+    }
+
+    <a routerLink="/orders" class="orders-btn">🎉 View My Orders</a>
+    <a routerLink="/products" class="continue-btn">Continue Shopping →</a>
+  </div>
+
+</div>

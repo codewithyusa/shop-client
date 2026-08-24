@@ -1,8 +1,12 @@
 <div class="cart-page">
-  <div class="cart-container">
 
+  <div class="cart-hero">
     <h1>Shopping Cart</h1>
+    <p>Review your selected clothing items</p>
+    <a routerLink="/products" class="continue-top">← Continue Shopping</a>
+  </div>
 
+  <div class="cart-container">
     @if (isLoading()) {
       <p class="loading">Loading cart...</p>
     } @else if (error()) {
@@ -15,21 +19,28 @@
     } @else {
       <div class="cart-content">
 
-        <div class="cart-items">
+        <div class="cart-items-card">
+          <div class="items-header">
+            <h2>Your Products</h2>
+            <span class="item-count">{{ getTotalItems() }} items</span>
+          </div>
+
           @for (item of cart()!.items; track item.productId) {
             <div class="cart-item">
               <img [src]="item.image" [alt]="item.productName" class="item-image" />
               <div class="item-details">
                 <h3>{{ item.productName }}</h3>
-                <p class="item-price">${{ item.price }}</p>
+                <p class="item-price">${{ item.price.toFixed(2) }}</p>
+                <div class="item-quantity">
+                  <button (click)="updateQuantity(item.productId, item.quantity - 1)">−</button>
+                  <span>{{ item.quantity }}</span>
+                  <button (click)="updateQuantity(item.productId, item.quantity + 1)">+</button>
+                </div>
               </div>
-              <div class="item-quantity">
-                <button (click)="updateQuantity(item.productId, item.quantity - 1)">−</button>
-                <span>{{ item.quantity }}</span>
-                <button (click)="updateQuantity(item.productId, item.quantity + 1)">+</button>
+              <div class="item-right">
+                <p class="item-total">${{ (item.price * item.quantity).toFixed(2) }}</p>
+                <button class="remove-btn" (click)="removeItem(item.productId)">Remove</button>
               </div>
-              <p class="item-total">${{ item.price * item.quantity }}</p>
-              <button class="remove-btn" (click)="removeItem(item.productId)">🗑</button>
             </div>
           }
         </div>
@@ -37,15 +48,40 @@
         <div class="cart-summary">
           <h2>Order Summary</h2>
           <div class="summary-row">
-            <span>Total</span>
-            <span class="total">${{ getTotal() }}</span>
+            <span>Items</span>
+            <span>{{ getTotalItems() }}</span>
           </div>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>${{ getSubtotal().toFixed(2) }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span class="free">FREE</span>
+          </div>
+
+          <div class="voucher-section">
+            <p>Do you have a voucher or gift card?</p>
+            <div class="voucher-input">
+              <input [(ngModel)]="voucherCode" placeholder="Enter code here" />
+              <button (click)="applyVoucher()">Apply Code</button>
+            </div>
+            @if (voucherMessage()) {
+              <p class="voucher-msg">{{ voucherMessage() }}</p>
+            }
+          </div>
+
+          <div class="summary-total">
+            <span>Total</span>
+            <span class="total-amount">${{ getSubtotal().toFixed(2) }}</span>
+          </div>
+
           <a routerLink="/checkout" class="checkout-btn">Proceed to Checkout</a>
           <a routerLink="/products" class="continue-btn">Continue Shopping</a>
+          <button class="clear-btn" (click)="clearCart()">Clear Cart</button>
         </div>
 
       </div>
     }
-
   </div>
 </div>
