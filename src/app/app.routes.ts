@@ -1,14 +1,16 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
 import { adminGuard } from './core/admin.guard';
+import { rootGuard } from './core/root.guard';
 
 export const routes: Routes = [
   // Public routes
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
-  },
+// AFTER
+{
+  path: '',
+  canActivate: [rootGuard],
+  loadComponent: () => import('./features/home/home').then(m => m.Home)
+},
   {
     path: 'signup',
     loadComponent: () => import('./features/auth/signup/signup').then(m => m.SignupComponent)
