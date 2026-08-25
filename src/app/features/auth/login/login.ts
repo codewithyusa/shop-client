@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/auth';
 
 @Component({
@@ -14,6 +14,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   isSubmitting = signal(false);
   errorMessage = signal('');
@@ -42,8 +43,12 @@ export class LoginComponent {
     this.auth.login({ email, password }).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        const redirect = this.auth.isAdmin() ? '/admin' : '/home';
-        this.router.navigate([redirect]);
+        if (this.auth.isAdmin()) {
+          this.router.navigate(['/admin']);
+        } else {
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+          this.router.navigate([returnUrl]);
+        }
       },
       error: (err) => {
         this.isSubmitting.set(false);

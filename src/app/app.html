@@ -8,7 +8,7 @@
         <a class="nav-link" routerLink="/signup">Sign Up</a>
         <a class="nav-link" routerLink="/login">Login</a>
       </div>
-    } @else {
+    } @else if (isLoggedIn()) {
       <div class="nav-links">
         <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
         <a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a>
@@ -25,6 +25,13 @@
         }
         <button class="logout-button" type="button" (click)="logout()">Logout</button>
         <a routerLink="/profile" class="user-button" title="Account">👤</a>
+      </div>
+    } @else {
+      <div class="nav-links">
+        <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+        <a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a>
+        <a class="nav-link" routerLink="/login">Sign In</a>
+        <a class="nav-link signup-link" routerLink="/signup">Sign Up</a>
       </div>
     }
 

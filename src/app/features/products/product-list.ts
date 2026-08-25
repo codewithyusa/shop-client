@@ -1,8 +1,9 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Product } from '../../models/product.model';
+import { AuthService } from '../../core/auth';
 
 @Component({
   selector: 'app-product-list',
@@ -14,6 +15,8 @@ import { Product } from '../../models/product.model';
 export class ProductList implements OnInit {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private auth = inject(AuthService);
 
   products = signal<Product[]>([]);
   isLoading = signal(true);
@@ -28,7 +31,7 @@ export class ProductList implements OnInit {
       this.category.set(cat);
       this.loadProducts(cat);
     });
-    this.loadFavorites();
+    if (this.auth.isLoggedIn()) this.loadFavorites();
   }
 
   loadFavorites() {
@@ -43,6 +46,10 @@ export class ProductList implements OnInit {
   toggleFavorite(event: Event, productId: number) {
     event.preventDefault();
     event.stopPropagation();
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+      return;
+    }
     this.http.post<{ isFavorited: boolean }>(`/api/favorites/${productId}/toggle`, {}).subscribe({
       next: (res) => {
         const current = new Set(this.favorites());

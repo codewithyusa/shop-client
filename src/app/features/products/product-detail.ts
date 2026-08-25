@@ -1,7 +1,8 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Product } from '../../models/product.model';
+import { AuthService } from '../../core/auth';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,6 +14,8 @@ import { Product } from '../../models/product.model';
 export class ProductDetail implements OnInit {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private auth = inject(AuthService);
 
   product = signal<Product | null>(null);
   isLoading = signal(true);
@@ -28,6 +31,7 @@ export class ProductDetail implements OnInit {
       next: (data) => {
         this.product.set(data);
         this.isLoading.set(false);
+        if (this.auth.isLoggedIn()) this.loadFavoriteStatus(data.id);
       },
       error: () => {
         this.error.set('Product not found.');
@@ -36,17 +40,34 @@ export class ProductDetail implements OnInit {
     });
   }
 
+  private requireAuth(): boolean {
+    if (this.auth.isLoggedIn()) return true;
+    this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+    return false;
+  }
+
+  private loadFavoriteStatus(productId: number) {
+    this.http.get<any[]>('/api/favorites').subscribe({
+      next: (data) => {
+        const ids = new Set(data.map((f: any) => f.productId ?? f.id));
+        this.isFavorited.set(ids.has(productId));
+      }
+    });
+  }
+
   increment() {
-    if (this.quantity() < (this.product()?.stock ?? 1)) {
+    if (!this.requireAuth()) return;
+    if (this.quantity() < (this.product()?.stock ?? 1))
       this.quantity.update(q => q + 1);
-    }
   }
 
   decrement() {
+    if (!this.requireAuth()) return;
     if (this.quantity() > 1) this.quantity.update(q => q - 1);
   }
 
   addToCart() {
+    if (!this.requireAuth()) return;
     const product = this.product();
     if (!product) return;
     this.addingToCart.set(true);
@@ -64,6 +85,7 @@ export class ProductDetail implements OnInit {
   }
 
   toggleFavorite() {
+    if (!this.requireAuth()) return;
     const product = this.product();
     if (!product) return;
     this.http.post<{ isFavorited: boolean }>(`/api/favorites/${product.id}/toggle`, {}).subscribe({

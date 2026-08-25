@@ -22,4 +22,34 @@
     </div>
   </section>
 
+  @if (featured().length > 0) {
+    <section class="featured-section">
+      <div class="featured-header">
+        <h2>Featured Products</h2>
+        <a [routerLink]="['/products']" class="view-all">View All →</a>
+      </div>
+      <div class="featured-grid">
+        @for (p of featured(); track p.id) {
+          <a [routerLink]="['/products', p.id]" class="product-card">
+            <div class="product-image-wrap">
+              <img [src]="p.image" [alt]="p.name" />
+            </div>
+            <div class="product-info">
+              <h3>{{ p.name }}</h3>
+              <span>${{ p.price }}</span>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  @if (!auth.isLoggedIn()) {
+    <section class="signin-banner">
+      <p>See personalized recommendations</p>
+      <a [routerLink]="['/login']" class="signin-btn">Sign in</a>
+      <span class="new-customer">New customer? <a [routerLink]="['/signup']">Start here.</a></span>
+    </section>
+  }
+
 </div>

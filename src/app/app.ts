@@ -35,6 +35,7 @@ export class App implements OnInit {
            url.includes('/verify-email');
   });
 
+  isLoggedIn = computed(() => this.auth.isLoggedIn());
   isAdmin = computed(() => this.auth.isAdmin());
 
   ngOnInit() {
