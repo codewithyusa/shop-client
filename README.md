@@ -1,59 +1,383 @@
-# ShopClient
+# YUSA Shop — E-Commerce Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.19.
+Angular frontend for the YUSA Shop e-commerce platform. Provides a full shopping experience including product browsing, cart management, checkout with Chapa payment, order history, favorites, user profile, and an admin dashboard.
 
-## Development server
+---
 
-To start a local development server, run:
+## 📸 Screenshots
 
-```bash
-ng serve
+### Home
+![Home](docs/screenshots/home.png)
+
+### Login
+![Login](docs/screenshots/login.png)
+
+### Sign Up
+![Sign Up](docs/screenshots/signup.png)
+
+### Product List
+![Product List](docs/screenshots/product-list.png)
+
+### Product Detail
+![Product Detail](docs/screenshots/product-detail.png)
+
+### Shopping Cart
+![Cart](docs/screenshots/cart.png)
+
+### Checkout
+![Checkout](docs/screenshots/checkout.png)
+
+### Profile
+![Profile](docs/screenshots/profile.png)
+
+### Order History
+![Order History](docs/screenshots/order-history.png)
+
+### Favorites
+![Favorites](docs/screenshots/favorites.png)
+
+### Admin Dashboard
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+
+### Admin Login
+![Admin Login](docs/screenshots/admin-login.png)
+
+---
+
+## 🛠️ Tech Stack
+
+| Concern      | Technology          |
+|--------------|---------------------|
+| Framework    | Angular             |
+| Language     | TypeScript          |
+| UI           | HTML / SCSS         |
+| Routing      | Angular Router      |
+| HTTP         | Angular HttpClient  |
+| Auth         | JWT + Interceptor   |
+| Testing      | Jasmine / Karma     |
+| API          | ShopApi ASP.NET Core 10 |
+
+---
+
+## 📁 Project Structure
+
+```
+shop-client/
+│   angular.json
+│   package.json
+│   tsconfig.json
+│   README.md
+│
+├── docs/
+│   └── screenshots/
+│
+└── src/
+    │   index.html
+    │   main.ts
+    │   styles.scss
+    │
+    ├── app/
+    │   │   app.config.ts
+    │   │   app.html
+    │   │   app.routes.ts
+    │   │   app.scss
+    │   │   app.spec.ts
+    │   │   app.ts
+    │   │
+    │   ├── core/
+    │   │       admin.guard.ts
+    │   │       auth.guard.ts
+    │   │       auth.interceptor.ts
+    │   │       auth.spec.ts
+    │   │       auth.ts
+    │   │       root.guard.ts
+    │   │
+    │   ├── features/
+    │   │   ├── admin-dashboard/
+    │   │   │       admin-dashboard.css
+    │   │   │       admin-dashboard.html
+    │   │   │       admin-dashboard.spect.ts
+    │   │   │       admin-dashboard.ts
+    │   │   │
+    │   │   ├── admin-login/
+    │   │   │       admin-login.html
+    │   │   │       admin-login.scss
+    │   │   │       admin-login.ts
+    │   │   │
+    │   │   ├── admin-signup/
+    │   │   │       admin-signup.html
+    │   │   │       admin-signup.scss
+    │   │   │       admin-signup.ts
+    │   │   │
+    │   │   ├── auth/
+    │   │   │   │   verify-email.html
+    │   │   │   │   verify-email.scss
+    │   │   │   │   verify-email.spec.ts
+    │   │   │   │   verify-email.ts
+    │   │   │   │
+    │   │   │   ├── forgot-password/
+    │   │   │   │       forgot-password.html
+    │   │   │   │       forgot-password.scss
+    │   │   │   │       forgot-password.ts
+    │   │   │   │
+    │   │   │   ├── login/
+    │   │   │   │       login.html
+    │   │   │   │       login.scss
+    │   │   │   │       login.spect.ts
+    │   │   │   │       login.ts
+    │   │   │   │
+    │   │   │   └── signup/
+    │   │   │           signup.html
+    │   │   │           signup.scss
+    │   │   │           signup.spect.ts
+    │   │   │           signup.ts
+    │   │   │
+    │   │   ├── cart/
+    │   │   │       cart.html
+    │   │   │       cart.scss
+    │   │   │       cart.spec.ts
+    │   │   │       cart.ts
+    │   │   │
+    │   │   ├── checkout/
+    │   │   │       checkout.html
+    │   │   │       checkout.scss
+    │   │   │       checkout.spec.ts
+    │   │   │       checkout.ts
+    │   │   │       order-success.html
+    │   │   │       order-success.scss
+    │   │   │       order-success.ts
+    │   │   │
+    │   │   ├── favorites/
+    │   │   │       favorites.html
+    │   │   │       favorites.scss
+    │   │   │       favorites.spec.ts
+    │   │   │       favorites.ts
+    │   │   │
+    │   │   ├── home/
+    │   │   │       home.html
+    │   │   │       home.scss
+    │   │   │       home.ts
+    │   │   │
+    │   │   ├── orders/
+    │   │   │       order-history.html
+    │   │   │       order-history.scss
+    │   │   │       order-history.spec.ts
+    │   │   │       order-history.ts
+    │   │   │
+    │   │   ├── products/
+    │   │   │       product-detail.html
+    │   │   │       product-detail.scss
+    │   │   │       product-detail.spec.ts
+    │   │   │       product-detail.ts
+    │   │   │       product-list.html
+    │   │   │       product-list.scss
+    │   │   │       product-list.spec.ts
+    │   │   │       product-list.ts
+    │   │   │
+    │   │   └── profile/
+    │   │           profile.html
+    │   │           profile.scss
+    │   │           profile.spec.ts
+    │   │           profile.ts
+    │   │
+    │   ├── models/
+    │   │       auth.model.ts
+    │   │       cart.model.ts
+    │   │       order.model.ts
+    │   │       product.model.ts
+    │   │
+    │   ├── services/
+    │   │       cart.ts
+    │   │       cart.spec.ts
+    │   │       co.ts
+    │   │       co.spec.ts
+    │   │       favorite.ts
+    │   │       favorite.spec.ts
+    │   │       order.ts
+    │   │       order.spec.ts
+    │   │       product.ts
+    │   │       product.spec.ts
+    │   │       auth.spect.ts
+    │   │
+    │   └── shared/
+    │           footer.html
+    │           footer.scss
+    │           footer.ts
+    │           navbar.html
+    │           navbar.scss
+    │           navbar.spec.ts
+    │           navbar.ts
+    │           product-card.html
+    │           product-card.scss
+    │           product-card.spec.ts
+    │           product-card.ts
+    │
+    └── environments/
+            environment.ts
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## ✨ Features
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Authentication
+- Login with email and password
+- Sign up with full name, email, and password
+- Email verification
+- Forgot password and reset password flow
+- JWT token stored and sent via HTTP interceptor
+- Auth guard for protected routes
+- Admin guard for admin-only routes
+- Root guard for redirect logic
+
+### Products
+- Home page with category browsing (T-Shirts, Jeans, Jackets, Dresses, Hoodies, Suits)
+- Product list with search and category filter
+- Product detail with quantity selector
+- Add to cart and save to favorites from detail page
+- Reusable product card component
+
+### Cart
+- Add, remove, update quantity
+- Order summary with subtotal and shipping
+- Apply coupon / voucher code
+- Proceed to checkout
+
+### Checkout
+- Customer information form
+- Shipping address
+- Payment method selection
+- Chapa payment integration
+- Order success page
+
+### Orders
+- View order history
+- Order status tracking
+
+### Favorites
+- Toggle favorites from product list or detail
+- View all saved favorites
+
+### Profile
+- View profile with avatar and role badge
+- Edit full name and phone number
+
+### Admin
+- Admin login
+- Admin signup
+- Admin dashboard
+
+---
+
+## 🔐 Authentication & Guards
+
+| Guard | Purpose |
+|---|---|
+| `auth.guard.ts` | Protects customer routes |
+| `admin.guard.ts` | Protects admin routes |
+| `root.guard.ts` | Redirects based on role |
+| `auth.interceptor.ts` | Attaches JWT to all requests |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js
+- npm
+- Angular CLI
+- ShopApi backend running
+
+### 1. Install dependencies
 
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 2. Start the backend API
 
 ```bash
-ng generate --help
+dotnet run --project ../ShopApi/ShopApi.Api
 ```
 
-## Building
-
-To build the project run:
+### 3. Start the frontend
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+App available at:
 
-## Running unit tests
+```
+http://localhost:4200
+```
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+---
+
+## 🧪 Testing
 
 ```bash
-ng test
+npm test
 ```
 
-## Running end-to-end tests
+The project includes tests for:
+- App component
+- Login component
+- Signup component
+- Verify email component
+- Cart component
+- Checkout component
+- Favorites component
+- Order history component
+- Product list component
+- Product detail component
+- Profile component
+- Navbar component
+- Product card component
+- Cart service
+- Favorite service
+- Order service
+- Product service
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## 📋 Routes
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+| Route | Component | Guard |
+|---|---|---|
+| `/` | Home | — |
+| `/login` | Login | — |
+| `/signup` | Signup | — |
+| `/verify-email` | Verify Email | — |
+| `/forgot-password` | Forgot Password | — |
+| `/products` | Product List | Auth |
+| `/products/:id` | Product Detail | Auth |
+| `/cart` | Cart | Auth |
+| `/checkout` | Checkout | Auth |
+| `/orders` | Order History | Auth |
+| `/favorites` | Favorites | Auth |
+| `/profile` | Profile | Auth |
+| `/admin/login` | Admin Login | — |
+| `/admin/signup` | Admin Signup | — |
+| `/admin/dashboard` | Admin Dashboard | Admin |
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🏗️ Project Goals
+
+This project is part of the CoTBE Software Engineering Programme and demonstrates:
+
+- Feature-based Angular project structure
+- JWT authentication with HTTP interceptor
+- Role-based route guards
+- Reusable shared components
+- Service-based API integration
+- Angular reactive forms
+- Unit testing with Jasmine/Karma
+- Clean Git commit practices
+
+---
+
+## 📄 License
+
+School project — CoTBE Software Engineering Programme 2026.
