@@ -7,40 +7,40 @@ Angular frontend for the YUSA Shop e-commerce platform. Provides a full shopping
 ## 📸 Screenshots
 
 ### Home
-![Home](docs/screenshots/home.png)
+![Home](docs/screenshoots/home.png)
 
 ### Login
-![Login](docs/screenshots/login.png)
+![Login](docs/screenshoots/login.png)
 
 ### Sign Up
-![Sign Up](docs/screenshots/signup.png)
+![Sign Up](docs/screenshoots/signup.png)
 
 ### Product List
-![Product List](docs/screenshots/product-list.png)
+![Product List](docs/screenshoots/product-list.png)
 
 ### Product Detail
-![Product Detail](docs/screenshots/product-detail.png)
+![Product Detail](docs/screenshoots/product-detail.png)
 
 ### Shopping Cart
-![Cart](docs/screenshots/cart.png)
+![Cart](docs/screenshoots/cart.png)
 
 ### Checkout
-![Checkout](docs/screenshots/checkout.png)
+![Checkout](docs/screenshoots/checkout.png)
 
 ### Profile
-![Profile](docs/screenshots/profile.png)
+![Profile](docs/screenshoots/profile.png)
 
 ### Order History
-![Order History](docs/screenshots/order-history.png)
+![Order History](docs/screenshoots/order-history.png)
 
 ### Favorites
-![Favorites](docs/screenshots/favorites.png)
+![Favorites](docs/screenshoots/favorites.png)
 
 ### Admin Dashboard
-![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+![Admin Dashboard](docs/screenshoots/admin-dashboard.png)
 
 ### Admin Login
-![Admin Login](docs/screenshots/admin-login.png)
+![Admin Login](docs/screenshoots/admin-login.png)
 
 ---
 
