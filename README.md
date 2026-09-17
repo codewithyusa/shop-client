@@ -30,18 +30,6 @@ Angular frontend for the YUSA Shop e-commerce platform. Provides a full shopping
 ### Profile
 ![Profile](docs/screenshoots/profile.png)
 
-### Order History
-![Order History](docs/screenshoots/order-history.png)
-
-### Favorites
-![Favorites](docs/screenshoots/favorites.png)
-
-### Admin Dashboard
-![Admin Dashboard](docs/screenshoots/admin-dashboard.png)
-
-### Admin Login
-![Admin Login](docs/screenshoots/admin-login.png)
-
 ---
 
 ## 🛠️ Tech Stack
